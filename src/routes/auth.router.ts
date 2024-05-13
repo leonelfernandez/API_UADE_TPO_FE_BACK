@@ -1,10 +1,12 @@
 import { Router, Request, Response } from "express";
+import * as AuthController from "../controllers/auth.controller";
 import { body } from "express-validator";
-import { validateFields } from "../middleware/validation-error.middleware";
-import { getUser } from "../services/user.services";
-import { loginController, registerController } from "../controllers/auth.controller";
+import * as AuthService from "../services/auth.service";
+import validateFields from "../middleware/validation-error.middleware";
+import isAuth from "../middleware/is-auth.middleware";
+import User from "../models/user/user.model";
 
-const authRoutes = Router();
+export const authRoutes = Router();
 
 authRoutes.post(
   "/login",
@@ -12,8 +14,8 @@ authRoutes.post(
     body("email")
       .isEmail()
       .withMessage("Please enter a valid email.")
-      .custom(async (_, { req }) => {
-        const user = await getUser(req.body.email);
+      .custom(async (value, { req }) => {
+        const user = await AuthService.find(req.body.email);
         if (!user?.active) {
           return Promise.reject("User not found");
         }
@@ -21,7 +23,7 @@ authRoutes.post(
       .normalizeEmail(),
   ],
   validateFields,
-  loginController
+  AuthController.login
 );
 
 authRoutes.post(
@@ -30,8 +32,8 @@ authRoutes.post(
     body("email")
       .isEmail()
       .withMessage("Please enter a valid email.")
-      .custom(async (_, { req }) => {
-        const user = await getUser(req.body.email);
+      .custom(async (value, { req }) => {
+        const user = await User.findOne({ email: req.body.email });
         console.log(user);
         if (user) {
           return Promise.reject("E-mail already exists!");
@@ -52,43 +54,41 @@ authRoutes.post(
     }),
   ],
   validateFields,
-  registerController
+
+  AuthController.register
 );
 
-// authRoutes.put("/confirmation/:token", AuthController.confirmAccount);
+authRoutes.put("/confirmation/:token", AuthController.confirmAccount);
 
-// authRoutes.post(
-//   "/sendResetPasswordEmail",
-//   [body("email").isEmail().normalizeEmail()],
-//   validateFields,
-//   AuthController.sendResetPasswordEmail
-// );
+authRoutes.post(
+  "/sendResetPasswordEmail",
+  [body("email").isEmail().normalizeEmail()],
+  validateFields,
+  AuthController.sendResetPasswordEmail
+);
 
-// authRoutes.get("/reset/:token", AuthController.grantAccessToResetPassword);
+authRoutes.get("/reset/:token", AuthController.grantAccessToResetPassword);
 
-// authRoutes.post(
-//   "/resetPassword",
-//   [
-//     body("email")
-//       .isEmail()
-//       .withMessage("Please enter a valid email.")
-//       .normalizeEmail(),
+authRoutes.post(
+  "/resetPassword",
+  [
+    body("email")
+      .isEmail()
+      .withMessage("Please enter a valid email.")
+      .normalizeEmail(),
 
-//     body("password")
-//       .isLength({ min: 6 })
-//       .withMessage("Please enter a password of at least 6 characters."),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Please enter a password of at least 6 characters."),
 
-//     body("passwordConfirm").custom((value, { req }) => {
-//       if (value !== req.body.password) {
-//         throw new Error("Password should be equal.");
-//       }
+    body("passwordConfirm").custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Password should be equal.");
+      }
 
-//       return true;
-//     }),
-//   ],
-//   validateFields,
-//   AuthController.resetPassword
-// );
-
-
-export { authRoutes };
+      return true;
+    }),
+  ],
+  validateFields,
+  AuthController.resetPassword
+);

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { BaseVerification } from "../interfaces/verification.interface";
+import { BaseVerification } from "./verification.interface";
 
 
 const verificationSchema = new Schema<BaseVerification>({
