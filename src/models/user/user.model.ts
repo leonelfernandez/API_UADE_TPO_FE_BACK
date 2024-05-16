@@ -3,6 +3,10 @@ import { BaseUser } from "./user.interface";
 
 
 const userSchema = new Schema<BaseUser>({
+    username: {
+        type: String,
+        required: true,
+    },
     email: {
         type: String,
         required: true,

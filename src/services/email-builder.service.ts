@@ -11,9 +11,6 @@ const MAILTRAP_TRANSPORT = createTransport({
   auth: {
     user: process.env.MAIL_USERNAME,
     pass: process.env.MAIL_PASSWORD,
-    clientId: process.env.OAUTH_CLIENTID,
-    clientSecret: process.env.OAUTH_CLIENT_SECRET,
-    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
   },
 });
 
@@ -53,8 +50,7 @@ export class EmailBuilder implements IEmail {
     try {
       await MAILTRAP_TRANSPORT.sendMail({
         to: this.user.email,
-        from: "no-reply@dashsmart.com",
-        subject: "Welcome to DashSmart!",
+        subject: "Welcome to NetList!",
         html: this.emailTemplate,
       });
     } catch (error: any) {

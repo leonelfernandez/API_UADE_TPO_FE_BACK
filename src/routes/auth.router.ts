@@ -3,7 +3,6 @@ import * as AuthController from "../controllers/auth.controller";
 import { body } from "express-validator";
 import * as AuthService from "../services/auth.service";
 import validateFields from "../middleware/validation-error.middleware";
-import isAuth from "../middleware/is-auth.middleware";
 import User from "../models/user/user.model";
 
 export const authRoutes = Router();
@@ -15,7 +14,7 @@ authRoutes.post(
       .isEmail()
       .withMessage("Please enter a valid email.")
       .custom(async (value, { req }) => {
-        const user = await AuthService.find(req.body.email);
+        const user = await AuthService.findByEmail(req.body.email);
         if (!user?.active) {
           return Promise.reject("User not found");
         }
