@@ -55,7 +55,7 @@ export const createToken = (): Promise<string> => {
     randomBytes(32, async (err, buffer) => {
       let token: string = "";
       if (err) {
-        const error = new HttpException(422, "Error while generating token");
+        const error = new HttpException(422, "Error al generar token");
         throw error;
       }
 

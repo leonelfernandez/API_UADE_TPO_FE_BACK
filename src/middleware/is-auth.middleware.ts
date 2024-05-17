@@ -21,7 +21,7 @@ export default (req: any, res: Response, next: NextFunction) => {
     }
     
     if(!decodedToken) {
-        const err = new HttpException(401, "Not authenticated.")
+        const err = new HttpException(401, "No autenticado.")
         throw err;
     }
 

@@ -70,7 +70,7 @@ export const confirmAccount = async (
     if (!user) {
       const err = new HttpException(
         422,
-        "User doesn't exist or the account has been already confirmed."
+        "El usuario no existe o la cuenta ya ha sido confirmada."
       );
       throw err;
     }
@@ -143,7 +143,7 @@ export const grantAccessToResetPassword = async (req: Request, res: Response, ne
     if (!user) {
       const err = new HttpException(
         422,
-        "User doesn't exist or the account has been already confirmed."
+        "El usuario no existe o la cuenta ya ha sido confirmada."
       );
       throw err;
     }
@@ -196,7 +196,7 @@ export const login = async (
     if (!verifyUser) {
       const error = new HttpException(
         422,
-        "Wrong password. Try again or click ‘Forgot your password?’ to reset it."
+        "Contraseña incorrecta. Inténtalo de nuevo o haz clic en '¿Olvidaste tu contraseña?' para restablecerla."
       );
       throw error;
     }

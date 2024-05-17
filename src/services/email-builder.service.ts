@@ -50,7 +50,7 @@ export class EmailBuilder implements IEmail {
     try {
       await MAILTRAP_TRANSPORT.sendMail({
         to: this.user.email,
-        subject: "Welcome to NetList!",
+        subject: "¡Bienvenido a NetList!",
         html: this.emailTemplate,
       });
     } catch (error: any) {
