@@ -49,7 +49,7 @@ export module EmailTemplatesModule {
           <mj-text font-size="20px" color="#00A390" font-family="helvetica" line-height=2>
           Puedes restablecer tu contraseña de NetList haciendo clic en el botón de abajo. Si no solicitaste una nueva contraseña, por favor ignora este correo electrónico.
           </mj-text>
-                <mj-button align="center" padding-bottom="20px" padding-top="20px" font-size="22px"background-color="#00A390" border-radius="10px" color="#fff" font-family="open Sans Helvetica, Arial, sans-serif" href=${process.env.NODE_ENV === 'production' ? `${process.env.PRODUCTION_URL}reset/${token}` : `${process.env.DEV_URL}reset/${token}`}>Resetear Contraseña</mj-button>
+                <mj-button align="center" padding-bottom="20px" padding-top="20px" font-size="22px"background-color="#00A390" border-radius="10px" color="#fff" font-family="open Sans Helvetica, Arial, sans-serif" href=${process.env.NODE_ENV === 'production' ? `${process.env.PRODUCTION_URL}auth/reset/${token}` : `${process.env.DEV_URL}reset/${token}`}>Resetear Contraseña</mj-button>
   
                   <mj-text font-size="20px" color="#00A390" font-family="helvetica">El equipo de NetList</mj-text>
         </mj-column>

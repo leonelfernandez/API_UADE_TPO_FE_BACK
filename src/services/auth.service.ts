@@ -20,7 +20,7 @@ export const findByEmail = async (email: string) => {
   let user: ExtendedUser | null = null;
   console.log(email);
   try {
-    user = await User.findOne({ email: email }).lean();
+    user = await User.findOne({ email: email });
 
     if (!user) {
       const err = new HttpException(422, "User doesn't exist.");
