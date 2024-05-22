@@ -10,6 +10,7 @@ import { connect } from "mongoose";
 import { authRoutes } from "./routes/auth.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
+import { userRoutes } from "./routes/user.router";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 app.use(errorHandler);
 app.use(notFoundHandler);

@@ -11,6 +11,7 @@ export interface Tokens {
     resetPasswordTokenExpiration?: number;
 }
 export interface BaseUser extends Document {
+    username: string;
     name: string;
     email: string;
     password: string;

@@ -5,7 +5,7 @@ import { BaseUser } from "./user.interface";
 
 
 const userSchema = new Schema<BaseUser>({
-    id: {
+   username: {
         type: String,
         required: true,
     },
