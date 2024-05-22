@@ -23,7 +23,7 @@ dotenv.config();
 // }
 
 const PORT: number = parseInt(process.env.PORT as string, 10);
-const DATABASE_CONNECTION: string = process.env.DATABASE_CONNECTION  as string;
+const DATABASE_CONNECTION: string = process.env.DB_URI  as string;
 
 const app = express();
 

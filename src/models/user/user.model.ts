@@ -2,8 +2,10 @@ import { Schema, model } from "mongoose";
 import { BaseUser } from "./user.interface";
 
 
+
+
 const userSchema = new Schema<BaseUser>({
-    username: {
+   username: {
         type: String,
         required: true,
     },
@@ -14,6 +16,10 @@ const userSchema = new Schema<BaseUser>({
     password: {
         type: String,
         required: true
+    },
+    lists: {
+        type: [],
+        default: []
     },
     active: Boolean,
     tokens: {
