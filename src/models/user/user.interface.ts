@@ -1,6 +1,7 @@
 // src/items/user.interface.ts
 
 import { Document, ObjectId } from "mongoose";
+import { List } from "../list/list.interface";
 
 
 export interface Tokens {
@@ -13,6 +14,7 @@ export interface BaseUser extends Document {
     name: string;
     email: string;
     password: string;
+    lists: List[];
     active?: boolean;
     tokens: Tokens;
 

@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { NextFunction, Request, Response, Errback, Router } from "express";
 import * as AuthController from "../controllers/auth.controller";
 import { body } from "express-validator";
 import * as AuthService from "../services/auth.service";
