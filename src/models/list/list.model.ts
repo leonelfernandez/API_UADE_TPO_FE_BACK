@@ -13,7 +13,7 @@ const listSchema = new Schema<List>({
         required: true,
     },
     films: {
-        type: [FilmSchema],
+        type: [],
         default: []
     },
     canDelete: {

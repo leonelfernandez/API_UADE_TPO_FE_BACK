@@ -16,6 +16,7 @@ export const register = async (
   res: Response,
   next: NextFunction
 ) => {
+  const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
 
@@ -24,7 +25,8 @@ export const register = async (
     const hashedPw = await hash(password);
 
     const user = new User({
-      email: email,
+      username,
+      email,
       password: hashedPw,
       active: false,
     });

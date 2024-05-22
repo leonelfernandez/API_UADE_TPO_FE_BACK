@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { BaseUser } from "./user.interface";
-import { List } from "../list/list.interface";
-import  ListSchema from "../list/list.model";
+
 
 
 
@@ -19,7 +18,7 @@ const userSchema = new Schema<BaseUser>({
         required: true
     },
     lists: {
-        type: [ListSchema],
+        type: [],
         default: []
     },
     active: Boolean,
