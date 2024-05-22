@@ -16,6 +16,7 @@ export const register = async (
   res: Response,
   next: NextFunction
 ) => {
+  const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
 
@@ -24,7 +25,8 @@ export const register = async (
     const hashedPw = await hash(password);
 
     const user = new User({
-      email: email,
+      username,
+      email,
       password: hashedPw,
       active: false,
     });
@@ -68,7 +70,7 @@ export const confirmAccount = async (
     if (!user) {
       const err = new HttpException(
         422,
-        "User doesn't exist or the account has been already confirmed."
+        "El usuario no existe o la cuenta ya ha sido confirmada."
       );
       throw err;
     }
@@ -88,9 +90,13 @@ export const confirmAccount = async (
 
     res.status(201).json({
       message: "User updated!",
+      active: true
     });
   } catch (error: any) {
-    next(error);
+    next({
+      ...error,
+      active: false
+    });
   }
 };
 
@@ -103,7 +109,7 @@ export const sendResetPasswordEmail = async (
   const email: string = req.body.email;
 
   try {
-    const user = await AuthService.find(email);
+    const user = await AuthService.findByEmail(email);
 
     const emailData: Tokens = {
       resetPasswordToken: await AuthService.createToken(),
@@ -137,7 +143,7 @@ export const grantAccessToResetPassword = async (req: Request, res: Response, ne
     if (!user) {
       const err = new HttpException(
         422,
-        "User doesn't exist or the account has been already confirmed."
+        "El usuario no existe o la cuenta ya ha sido confirmada."
       );
       throw err;
     }
@@ -182,7 +188,7 @@ export const login = async (
   const JWT_EXPIRATION = process.env.JWT_EXPIRATION as string;
 
   try {
-    const user = await AuthService.find(email);
+    const user = await AuthService.findByEmail(email);
 
 
     const verifyUser = await verify(user!.password, password);
@@ -190,7 +196,7 @@ export const login = async (
     if (!verifyUser) {
       const error = new HttpException(
         422,
-        "Wrong password. Try again or click ‘Forgot your password?’ to reset it."
+        "Contraseña incorrecta. Inténtalo de nuevo o haz clic en '¿Olvidaste tu contraseña?' para restablecerla."
       );
       throw error;
     }
@@ -207,7 +213,7 @@ export const login = async (
     )
 
     res.status(200).json({
-      token: token
+      jwt: token
     });
   } catch (err: any) {
     next(err);

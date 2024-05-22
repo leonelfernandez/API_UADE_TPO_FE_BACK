@@ -10,16 +10,34 @@ import { randomBytes } from "crypto";
 import HttpException from "../common/http-exception";
 import { AcceptedEmailsOperations } from "./email-builder";
 import { EmailBuilder } from "./email-builder.service";
+import mongoose from "mongoose";
 
 /**
  * Service Methods
  */
 
-export const find = async (email: string) => {
+export const findByEmail = async (email: string) => {
+  let user: ExtendedUser | null = null;
+  console.log(email);
+  try {
+    user = await User.findOne({ email: email });
+
+    if (!user) {
+      const err = new HttpException(422, "User doesn't exist.");
+      throw err;
+    }
+  } catch (err) {
+    throw err;
+  }
+
+  return user;
+};
+
+export const findById = async (id: string) => {
   let user: ExtendedUser | null = null;
 
   try {
-    user = await User.findOne({ email: email });
+    user = await User.findOne({ _id: new mongoose.Types.ObjectId(id) }).lean();
 
     if (!user) {
       const err = new HttpException(422, "User doesn't exist.");
@@ -37,7 +55,7 @@ export const createToken = (): Promise<string> => {
     randomBytes(32, async (err, buffer) => {
       let token: string = "";
       if (err) {
-        const error = new HttpException(422, "Error while generating token");
+        const error = new HttpException(422, "Error al generar token");
         throw error;
       }
 

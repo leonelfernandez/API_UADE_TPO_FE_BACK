@@ -8,7 +8,7 @@ export const notFoundHandler = (
   next: NextFunction
 ) => {
 
-  const message = "Resource not found";
+  const message = "Recurso no encontrado";
 
   response.status(404).send(message);
 };

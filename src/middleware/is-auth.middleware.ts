@@ -8,12 +8,9 @@ dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export default (req: any, res: Response, next: NextFunction) => {
-    const token = req.get("Authorization")?.split(" ")[1];
+    const token = req.get("Authorization");
     
-    if(!token) {
-        const err = new HttpException(401, "Not authenticated.")
-        throw err;
-    }
+    if(!token) return;
 
     let decodedToken: any;
 
@@ -24,11 +21,11 @@ export default (req: any, res: Response, next: NextFunction) => {
     }
     
     if(!decodedToken) {
-        const err = new HttpException(401, "Not authenticated.")
+        const err = new HttpException(401, "No autenticado.")
         throw err;
     }
 
-    req.userId = decodedToken.userId;
+    req.userId = decodedToken?.userId;
     next();
 };
 

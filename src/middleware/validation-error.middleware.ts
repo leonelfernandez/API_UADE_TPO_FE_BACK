@@ -9,7 +9,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     if (!errors.isEmpty()) {
       const error = new HttpException(
         422,
-        "Validation failed, entered data is incorrect."
+        "Validación fallida, los datos ingresados son incorrectos."
       );
       throw error;
     }
