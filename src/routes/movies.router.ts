@@ -5,22 +5,9 @@ import validateFields from "../middleware/validation-error.middleware";
 export const authRoutes = Router();
 
 //Obtener una pelicula
-authRoutes.get("/movie/:id", 
-validateFields,
-MoviesController.getMovieById
-
-);
+authRoutes.get("/movie/:id", validateFields, MoviesController.getMovieById);
 
 //Obtener todas las peliculas por genero
-authRoutes.get("/movie/:genre", (req, res) => {
-    res.json({
-      message: "Movies route",
-    });
-  });
+authRoutes.get("/movie/:genre", validateFields, MoviesController.getMoviesByGenre);
 
-//Obtener todas las peliculas
-  authRoutes.get("/movies", (req, res) => {
-    res.json({
-      message: "Movies route",
-    });
-  });
+authRoutes.get("/movies/actor/:id", validateFields, MoviesController.getMoviesByActor);

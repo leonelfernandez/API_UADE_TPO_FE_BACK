@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import { List } from "../list/list.interface";
-import FilmSchema from "../film/film.model";
+import { Film } from "../film/film.interface";
 
 
 const listSchema = new Schema<List>({
@@ -13,7 +13,7 @@ const listSchema = new Schema<List>({
         required: true,
     },
     films: {
-        type: [],
+        type: Array<Film>,
         default: []
     },
     canDelete: {

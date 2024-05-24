@@ -50,7 +50,7 @@ export const register = async (
       err.message = "Validation failed";
     }
 
-    next(err);
+    next(err); //PREGUNTAR A FEDE
   }
 };
 
