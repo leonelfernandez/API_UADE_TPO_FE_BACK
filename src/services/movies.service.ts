@@ -18,12 +18,8 @@ const getIdByMovieGenre = async (genre: string) => {
 
 export const getMovieById = async (id: string)=> {
     try {
-        const movie = await fetch(`${apiURL}/movie/${id}?api_key=${apiKey}&include_adult=false&include_video=false&language=es-Es&page=1`)
+        return await fetch(`${apiURL}/movie/${id}?append_to_response=credits&language=es`)
             .then(response => response.json());
-        const castCrew = await fetch(`${apiURL}/movie/${id}/credits?api_key=${apiKey}&language=es-Es`) //Obtengo el cast y crew de la pelicula
-            .then(response => response.json());
-        return { ...movie, cast: castCrew["cast"], crew: castCrew["crew"]} ;
-        
     } catch(err) {
         throw err;
     }
