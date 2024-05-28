@@ -18,7 +18,7 @@ const getIdByMovieGenre = async (genre: string) => {
 
 export const getMovieById = async (id: string)=> {
     try {
-        return await fetch(`${apiURL}/movie/${id}?append_to_response=credits&language=es`)
+        return await fetch(`${apiURL}/movie/${id}?${apiKey}&append_to_response=credits&language=es`)
             .then(response => response.json());
     } catch(err) {
         throw err;
