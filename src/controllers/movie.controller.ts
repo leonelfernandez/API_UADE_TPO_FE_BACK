@@ -13,7 +13,6 @@ export const getMovieById = async (req: Request, res: Response) => {
     } catch (err) { 
         throw new HttpException(500, "Error al buscar la pelicula");
     }
-
 }
 
 export const getMoviesByGenre = async (req: Request, res: Response) => {
@@ -25,22 +24,21 @@ export const getMoviesByGenre = async (req: Request, res: Response) => {
           if (typeof page !== 'string') {
             page = '1'; 
           }
-        const movies = await MovieService.getMoviesByGenre(req.params.genre, page);
+        const movies = await MovieService.getMoviesByGenre(req.params.genreId, page);
         res.status(200).json(movies);
     } catch (err) { 
         throw new HttpException(500, "Error al buscar las peliculas");
     }
-
 }
 
-export const getMoviesByActor = async (req: Request, res: Response) => { //Ver con fede
-    try {
-        const moviesByActor = await MovieService.getMoviesByActor(req.params.id);
-        res.status(200).json(moviesByActor);
-    } catch(err) {
-        throw new HttpException(500, "Error al buscar las peliculas del actor/director.");
-    }
-};
+// export const getMoviesByActor = async (req: Request, res: Response) => { //Ver con fede
+//     try {
+//         const moviesByActor = await MovieService.getMoviesByActor(req.params.id);
+//         res.status(200).json(moviesByActor);
+//     } catch(err) {
+//         throw new HttpException(500, "Error al buscar las peliculas del actor/director.");
+//     }
+// };
 
 
 

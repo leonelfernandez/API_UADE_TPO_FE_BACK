@@ -2,12 +2,12 @@ import { Router } from "express";
 import * as MoviesController from "../controllers/movie.controller";
 import validateFields from "../middleware/validation-error.middleware"; 
 
-export const authRoutes = Router();
+export const filmRoutes = Router();
 
 //Obtener una pelicula
-authRoutes.get("/movie/:id", validateFields, MoviesController.getMovieById);
+filmRoutes.get("/films/:id", validateFields, MoviesController.getMovieById);
 
 //Obtener todas las peliculas por genero
-authRoutes.get("/movie/:genre", validateFields, MoviesController.getMoviesByGenre);
+filmRoutes.get("/films/genre/:genreId", validateFields, MoviesController.getMoviesByGenre);
 
-authRoutes.get("/movies/actor/:id", validateFields, MoviesController.getMoviesByActor);
+//filmRoutes.get("/actor/:id", validateFields, MoviesController.getMoviesByActor);
