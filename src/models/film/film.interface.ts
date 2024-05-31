@@ -1,7 +1,7 @@
 export interface Film {
     adult: Boolean,
     backdrop_path: String,
-    genre_ids: [Number],
+    genre_ids: Number[],
     id: Number,
     original_language: String,
     original_title: String,

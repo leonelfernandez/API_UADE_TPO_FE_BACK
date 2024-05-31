@@ -24,6 +24,7 @@
     "mongodb": "^6.6.1",
     "mongoose": "^8.3.4",
     "nodemailer": "^6.9.13",
+    "tmdb-ts": "^1.8.0",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
