@@ -23,7 +23,7 @@ export const findByEmail = async (email: string) => {
     user = await User.findOne({ email: email });
 
     if (!user) {
-      const err = new HttpException(422, "User doesn't exist.");
+      const err = new HttpException(422, "El usuario no existe.");
       throw err;
     }
   } catch (err) {
@@ -40,7 +40,7 @@ export const findById = async (id: string) => {
     user = await User.findOne({ _id: new mongoose.Types.ObjectId(id) }).lean();
 
     if (!user) {
-      const err = new HttpException(422, "User doesn't exist.");
+      const err = new HttpException(422, "El usuario no existe.");
       throw err;
     }
   } catch (err) {
@@ -66,7 +66,7 @@ export const createToken = (): Promise<string> => {
 };
 
 export const generateEmail = async (
-  user: ExtendedUser,
+  user: BaseUser,
   tokens: Tokens,
   action: AcceptedEmailsOperations
 ) => {

@@ -19,7 +19,7 @@ export class EmailBuilder implements IEmail {
   private token: string;
   private emailTemplate: string = "";
 
-  constructor(user: ExtendedUser) {
+  constructor(user: BaseUser) {
     this.user = user;
     this.token = <string>user.tokens.confirmationToken || <string>user.tokens.resetPasswordToken;
   }

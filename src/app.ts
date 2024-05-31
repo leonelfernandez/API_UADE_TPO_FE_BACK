@@ -11,7 +11,7 @@ import { authRoutes } from "./routes/auth.router";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
 import { userRoutes } from "./routes/user.router";
-import { filmRoutes } from "./routes/movies.router";
+import { movieRoutes } from "./routes/movies.router";
 
 dotenv.config();
 
@@ -19,12 +19,12 @@ dotenv.config();
  * App Variables
  */
 
-// if (!process.env.PORT && !process.env.DATABASE_CONNECTION) {
-//   process.exit(1);
-// }
+if (!process.env.PORT && !process.env.DATABASE_CONNECTION) {
+  process.exit(1);
+}
 
 const PORT: number = parseInt(process.env.PORT as string, 10);
-const DATABASE_CONNECTION: string = process.env.DB_URI  as string;
+const DATABASE_CONNECTION: string = process.env.DATABASE_CONNECTION  as string;
 
 const app = express();
 
@@ -38,7 +38,7 @@ app.use(express.json());
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
-app.use("/movie", filmRoutes);
+app.use("/movie", movieRoutes);
 
 app.use(errorHandler);
 app.use(notFoundHandler);
