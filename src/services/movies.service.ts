@@ -1,49 +1,46 @@
 import Movie from "../models/user/user.model";
 import HttpException from "../common/http-exception";
-import * as dotenv from "dotenv";
 import Film from "../models/film/film.model";
+import { tmdb } from "../lib/tmdb";
 
-dotenv.config();
 
-const apiKey: string = process.env.API_KEY as string;
-const apiURL: string = process.env.API_URL as string;
 
-const getIdByMovieGenre = async (genre: string) => { 
-    return await fetch(`${apiURL}/genre/movie/list`)
-        .then(response => response.json())
-        .then(moviesGenres => moviesGenres["genres"].filter((g: { name: string }) => g.name === genre))
-        .catch(err => { throw new Error(err) });
+
+export const getMovieById = async (id: number)=> {
+    try {
+        const movie = await tmdb.movies.details(id, ["credits"], "es");
+
+        if(!movie) throw new HttpException(404, "No se encontró la película");
+
+        return movie;
+    } catch(err) {
+        throw err;
+    }
+};
+
+export const getGenres = async () => {
+    try {
+        const genres = await tmdb.genres.movies({language: "es"});
+
+        if(!genres.genres.length) throw new HttpException(404, "No se encontraron géneros");
+
+        return genres;
+    } catch(err) {
+        throw err;
+    }
 }
 
-
-export const getMovieById = async (id: string)=> {
+export const getMoviesByGenres = async (genreIds: number[]) => {
     try {
-        return await fetch(`${apiURL}/movie/${id}?${apiKey}&append_to_response=credits&language=es`)
-            .then(response => response.json());
+       const parsedGenres = genreIds.join(",");
+       const movies = await tmdb.discover.movie({with_genres: parsedGenres, language: "es"});
+
+       if(!movies.results.length) throw new HttpException(404, "No se encontraron películas");
+
+       return movies;
     } catch(err) {
         throw err;
     }
 };
 
-export const getMoviesByGenre = async (genre: string, page: string) => {
-    try {
-        const genreId = await getIdByMovieGenre(genre);
-
-        return await fetch(`${apiURL}/discover/movie?language=es&with_genres=${genreId}&page=${page}`)
-            .then(response => response.json());
-    } catch(err) {
-        throw err;
-    }
-};
-
-
-// export const getMoviesByActor = async (actorId: string) => { 
-//     try {
-//         const movies = await fetch(`${apiURL}/person/${actorId}?append_to_response=movie_credits`)
-//             .then(response => response.json());
-//         return movies["movie_credits"]["cast"];
-//     } catch(err) {
-//         throw err;
-//     }
-// }
 

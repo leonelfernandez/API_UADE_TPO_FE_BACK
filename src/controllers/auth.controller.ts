@@ -3,7 +3,6 @@ import HttpException from "../common/http-exception";
 import * as AuthService from "../services/auth.service";
 import { hash, verify } from "argon2";
 import User from "../models/user/user.model";
-import { validationResult } from "express-validator";
 import { Tokens } from "../models/user/user.interface";
 import * as dotenv from "dotenv";
 import * as jwt from "jsonwebtoken";
@@ -50,7 +49,7 @@ export const register = async (
       err.message = "Validation failed";
     }
 
-    next(err); //PREGUNTAR A FEDE
+    next(err);
   }
 };
 
@@ -119,7 +118,7 @@ export const sendResetPasswordEmail = async (
     await AuthService.generateEmail(user, emailData, "ResetPassword");
 
     res.status(201).json({
-      message: "Email sent!",
+      message: "Email enviado!",
     });
   } catch (err: any) {
     if (!(err instanceof HttpException)) {
@@ -171,7 +170,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
         },
       })
 
-      res.status(200).json({message: "Password changed!"})
+      res.status(200).json({message: "Constraseña cambiada!"})
     } catch (err: any) {
       next(err);
     }
