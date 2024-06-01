@@ -1,7 +1,7 @@
-import Movie from "../models/user/user.model";
 import HttpException from "../common/http-exception";
 import Film from "../models/film/film.model";
 import { tmdb } from "../lib/tmdb";
+import { Movie, Person, PopularMovies, Search } from "tmdb-ts";
 
 
 
@@ -12,7 +12,11 @@ export const getMovieById = async (id: number)=> {
 
         if(!movie) throw new HttpException(404, "No se encontró la película");
 
-        return movie;
+        return {
+            ...movie,
+            cast: movie.credits.cast,
+            crew: movie.credits.crew
+        };
     } catch(err) {
         throw err;
     }
@@ -20,9 +24,9 @@ export const getMovieById = async (id: number)=> {
 
 export const getGenres = async () => {
     try {
-        const genres = await tmdb.genres.movies({language: "es"});
+        const genres = (await tmdb.genres.movies({language: "es"})).genres;
 
-        if(!genres.genres.length) throw new HttpException(404, "No se encontraron géneros");
+        if(!genres.length) throw new HttpException(404, "No se encontraron géneros");
 
         return genres;
     } catch(err) {
@@ -30,17 +34,25 @@ export const getGenres = async () => {
     }
 }
 
-export const getMoviesByGenres = async (genreIds: number[]) => {
+
+export const getPopularMovies = async () => {
     try {
-       const parsedGenres = genreIds.join(",");
-       const movies = await tmdb.discover.movie({with_genres: parsedGenres, language: "es"});
+        const totalPages = 7;
+        const moviePromises: Promise<PopularMovies>[] = [];
 
-       if(!movies.results.length) throw new HttpException(404, "No se encontraron películas");
+        for (let page = 1; page <= totalPages; page++) {
+            const response = tmdb.movies.popular({ page, language: "es" });
+            moviePromises.push(response);
+        }
 
-       return movies;
+        const popularMovies = await Promise.all(moviePromises);
+        if (!popularMovies.length) throw new HttpException(404, "No se encontraron películas");
+
+        const uniqueMovies = popularMovies.flatMap((movies) => movies.results)
+            .filter((movie, index, self) => self.findIndex(m => m.id === movie.id) === index);
+        
+        return uniqueMovies;
     } catch(err) {
         throw err;
     }
-};
-
-
+}
