@@ -5,16 +5,19 @@ import { body } from "express-validator";
 
 export const movieRoutes = Router();
 
+//Obtener peliculas populares
+movieRoutes.get("/popular", MoviesController.getPopularMovies);
+
 //Obtener una pelicula
 movieRoutes.get("/byId/:id", MoviesController.getMovieById);
 
 //Obtener todos los generos
 movieRoutes.get("/genres", MoviesController.getGenres);
 
-//Obtener todas las peliculas por genero
-movieRoutes.post(
-  "/byGenres",
-  [body("genre_ids").exists().isArray().notEmpty().withMessage("Por favor, enviar lista de géneros")],
+//Buscar peliculas por titulo, director o actor
+movieRoutes.put(
+  "/search",
+  [body("param").exists().isString().notEmpty().withMessage("Por favor, enviar parámetro de búsqueda")],
   validateFields,
-  MoviesController.getMoviesByGenre
-);
+  MoviesController.searchMovies
+)

@@ -1,4 +1,6 @@
 import * as MovieService from "../services/movies.service";
+import * as SearchService from "../services/search.service";
+
 import { NextFunction, Request, Response } from "express";
 import * as dotenv from "dotenv";
 
@@ -19,20 +21,6 @@ export const getMovieById = async (
   }
 };
 
-export const getMoviesByGenre = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const genreIds = req.body.genre_ids as number[];
-    const movies = await MovieService.getMoviesByGenres(genreIds);
-    res.status(200).json(movies);
-  } catch (err) {
-    next(err);
-  }
-};
-
 export const getGenres = async (
   req: Request,
   res: Response,
@@ -45,3 +33,32 @@ export const getGenres = async (
         next(err);
     }
 };
+
+
+export const searchMovies = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const param = req.body.param as string;
+        const searchTerm = req.body.searchTerm as string;
+        const movies = await SearchService.searchMovie(param, searchTerm);
+        res.status(200).json(movies);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export const getPopularMovies = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const movies = await MovieService.getPopularMovies();
+        res.status(200).json(movies);
+    } catch (err) {
+        next(err);
+    }
+}
