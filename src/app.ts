@@ -12,6 +12,7 @@ import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
 import { userRoutes } from "./routes/user.router";
 import { movieRoutes } from "./routes/movies.router";
+import { listRoutes } from "./routes/lists.router";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/movie", movieRoutes);
+app.use("/list", listRoutes);
 
 app.use(errorHandler);
 app.use(notFoundHandler);
