@@ -1,5 +1,8 @@
 import { Schema, model } from "mongoose";
 import { BaseUser } from "./user.interface";
+import { listSchema } from "../list/list.model";
+import { UUID } from "mongodb";
+import { List } from "../list/list.interface";
 
 
 
@@ -18,8 +21,25 @@ const userSchema = new Schema<BaseUser>({
         required: true
     },
     lists: {
-        type: [],
-        default: []
+        type: [listSchema],
+        required: true,
+        default: (): List[] => [
+            {
+              title: "Por ver",
+              films: [],
+              canDelete: false,
+            },
+            {
+              title: "Preferidas",
+              films: [],
+              canDelete: false,
+            },
+            {
+              title: "Vistas",
+              films: [],
+              canDelete: false,
+            },
+          ]
     },
     active: Boolean,
     tokens: {

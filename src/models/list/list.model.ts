@@ -1,23 +1,17 @@
 import { Schema, model } from "mongoose";
 import { List } from "../list/list.interface";
-import { Film } from "../film/film.interface";
+import { filmSchema } from "../film/film.model";
 
 
-const listSchema = new Schema<List>({
-    id: {
-        type: Number,
-        required: true,
-    },
+export const listSchema = new Schema<List>({
     title: {
         type: String,
         required: true,
     },
-    films: {
-        type: Array<Film>,
-        default: []
-    },
+    films: [filmSchema],
     canDelete: {
         type: Boolean,
+        required: true,
         default: true
     }
 })

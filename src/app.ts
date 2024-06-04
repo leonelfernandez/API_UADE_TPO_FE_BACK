@@ -16,6 +16,12 @@ import { listRoutes } from "./routes/lists.router";
 
 dotenv.config();
 
+declare module "express-serve-static-core" {
+  interface Request {
+    userId?: string;
+  }
+}
+
 /**
  * App Variables
  */

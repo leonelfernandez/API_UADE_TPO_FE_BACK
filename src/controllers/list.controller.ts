@@ -7,7 +7,6 @@ import { Tokens } from "../models/user/user.interface";
 import * as dotenv from "dotenv";
 import List from "../models/list/list.model";
 import * as ListService from "../services/lists.service";
-import Film from "../models/film/film.model";
 
 
 dotenv.config();
@@ -99,18 +98,18 @@ export const addFilmToList = async (req: Request, res: Response, next: NextFunct
     const film = req.body.film;
     try {
         
-        const filmO: Film = new Film({
-            ...film
-        });
+        // const filmO = new Film({
+        //     ...film
+        // });
 
-        ListService.addFilmToList(id, title, filmO);
+        // ListService.addFilmToList(id, title, filmO);
         
-        res.status(201).json({
-            message: "Film added to list!",
-            userId: id,
-            listName: title,
-            film: film,
-        });
+        // res.status(201).json({
+        //     message: "Film added to list!",
+        //     userId: id,
+        //     listName: title,
+        //     film: film,
+        // });
 
     } catch (err: any) {
         if (!(err instanceof HttpException)) {

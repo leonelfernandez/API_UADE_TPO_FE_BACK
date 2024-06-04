@@ -3,7 +3,7 @@ import { BaseUser, ExtendedUser } from "../models/user/user.interface";
 import User from "../models/user/user.model";
 import HttpException from "../common/http-exception";
 import { List } from "../models/list/list.interface";
-import { Film } from "../models/film/film.interface";
+import { Movie } from "tmdb-ts";
 
 export const createNewList = async (id: string, list: List) => { 
     let user: BaseUser | null = null;
@@ -66,7 +66,7 @@ export const getListInfo = async (id: string, listTitle: string) => {
 };
 
 
-export const addFilmToList = async (id: string, listTitle: string, newFilm: Film) => {
+export const addFilmToList = async (id: string, listTitle: string, newFilm: Movie) => {
     let user: BaseUser | null = null;
 
     try {
