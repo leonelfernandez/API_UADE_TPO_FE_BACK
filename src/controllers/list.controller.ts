@@ -7,6 +7,7 @@ import { Tokens } from "../models/user/user.interface";
 import * as dotenv from "dotenv";
 import List from "../models/list/list.model";
 import * as ListService from "../services/lists.service";
+import { Movie } from "tmdb-ts";
 
 
 dotenv.config();
@@ -17,27 +18,24 @@ export const addNewListToUser = async (
   res: Response,
   next: NextFunction
 ) => {
-    const id = req.params.id;
+    const userId = req.userId as string;
     const title = req.body.title;
 
   try {
 
     const list = new List({
-        id: id,
         title: title,
         films: [],
         canDelete: true,
     });
 
-    ListService.createNewList(id, list);
-
-    //const listUpdated = await list.save();
+    await ListService.createNewList(userId, list);
 
 
     res.status(201).json({
       message: "List added to user!",
-      userId: id,
     });
+    
   } catch (err: any) {
     if (!(err instanceof HttpException)) {
       err.statusCode = 422;
@@ -50,17 +48,15 @@ export const addNewListToUser = async (
 
 
 export const deleteUserList = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const title = req.body.title;
+    const userId = req.userId as string;
+    const listId = req.params.listId;
 
   try {
 
-    ListService.deleteList(id, title);
+    ListService.deleteList(userId, listId);
 
     res.status(201).json({
       message: "List deleted from user!",
-      userId: id,
-      listName: title,
     });
   } catch (err: any) {
     if (!(err instanceof HttpException)) {
@@ -75,10 +71,11 @@ export const deleteUserList = async (req: Request, res: Response, next: NextFunc
 
 
 export const getListInfo = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const title = req.body.title;
+    const userId = req.userId as string;
+    const listId = req.params.listId;
+
     try {
-        const list = await ListService.getListInfo(id, title);
+        const list = await ListService.getListInfo(userId, listId);
         
         res.status(200).json(list);
 
@@ -93,23 +90,17 @@ export const getListInfo = async (req: Request, res: Response, next: NextFunctio
 };
 
 export const addFilmToList = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const title = req.body.title;
-    const film = req.body.film;
+    const userId = req?.userId as string;
+    const listId = req.params.listId;
+    const film = req.body.film as Movie;
     try {
         
-        // const filmO = new Film({
-        //     ...film
-        // });
-
-        // ListService.addFilmToList(id, title, filmO);
+        const list = await ListService.addFilmToList(userId, listId, film);
         
-        // res.status(201).json({
-        //     message: "Film added to list!",
-        //     userId: id,
-        //     listName: title,
-        //     film: film,
-        // });
+        res.status(201).json({
+            message: "Film added to list!",
+            list
+        });
 
     } catch (err: any) {
         if (!(err instanceof HttpException)) {
@@ -122,18 +113,16 @@ export const addFilmToList = async (req: Request, res: Response, next: NextFunct
 };
 
 export const deleteFilmFromList = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const title = req.body.title;
-    const film = req.body.film; //titulo de la pelicula
+    const userId = req.userId as string;
+    const listId = req.params.listId as string;
+    const filmId = req.body.filmId as string;
     try {
 
-        ListService.deleteFilmFromList(id, title, film);
+        const list = ListService.deleteFilmFromList(userId, listId, filmId);
         
         res.status(201).json({
             message: "Film deleted from list!",
-            userId: id,
-            listName: title,
-            film: film,
+            list,
         });
 
     } catch (err: any) {

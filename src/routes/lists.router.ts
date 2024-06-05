@@ -5,19 +5,19 @@ import isAuth from "../middleware/is-auth.middleware";
 export const listRoutes = Router();
 
 //Crear y actualizar lista de Objetos<List>
-listRoutes.put("/create/:id", isAuth, ListController.addNewListToUser);
+listRoutes.post("/create", isAuth, ListController.addNewListToUser);
 
 //Eliminar una lista
-listRoutes.put("/delete/:id", isAuth, ListController.deleteUserList);
+listRoutes.post("/delete/:listId", isAuth, ListController.deleteUserList);
 
 //Obtener informacion de una lista especifica de un usuario especifico
-listRoutes.get("/listinfo/:id", isAuth, ListController.getListInfo);
+listRoutes.get("/listInfo/:listId", isAuth, ListController.getListInfo);
 
 
 
-listRoutes.put("/addfilm/:id", isAuth, ListController.addFilmToList);
+listRoutes.post("/addFilm/:listId", isAuth, ListController.addFilmToList);
 
-listRoutes.put("/deletefilm/:id", isAuth, ListController.deleteFilmFromList);
+listRoutes.post("/deleteFilm/:listId", isAuth, ListController.deleteFilmFromList);
 
 // //Buscar peliculas por titulo, director o actor
 // movieRoutes.put(
