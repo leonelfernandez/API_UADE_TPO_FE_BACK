@@ -5,6 +5,8 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
+type JWToken = jwt.JwtPayload & { userId: string };
+
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export default (req: Request, res: Response, next: NextFunction) => {
@@ -12,10 +14,10 @@ export default (req: Request, res: Response, next: NextFunction) => {
     
     if(!token) return;
 
-    let decodedToken: any;
+    let decodedToken: JWToken;
 
     try {
-        decodedToken = jwt.verify(token, JWT_SECRET);
+        decodedToken = jwt.verify(token, JWT_SECRET) as JWToken;
     } catch(err) {
         throw err;
     }

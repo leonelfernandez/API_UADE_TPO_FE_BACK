@@ -33,7 +33,6 @@ authRoutes.post(
       .withMessage("Por favor, ingresa un correo electrónico válido.")
       .custom(async (value, { req }) => {
         const user = await User.findOne({ email: req.body.email });
-        console.log(user);
         if (user) {
           return Promise.reject("¡El correo electrónico ya existe!");
         }
