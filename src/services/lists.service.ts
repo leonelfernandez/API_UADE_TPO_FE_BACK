@@ -84,7 +84,7 @@ export const addFilmToList = async (userId: string, listId: string, newFilm: Mov
     }
 };
 
-export const addFilmToWatchList = async (userId: string, newFilm: Movie) => {
+export const toggleFilmToWatchList = async (userId: string, newFilm: Movie) => {
     try {
 
         const filmExists = await User.findOne({
@@ -96,15 +96,10 @@ export const addFilmToWatchList = async (userId: string, newFilm: Movie) => {
               }
             }
           }).exec();
-
-        if (filmExists) {
-            const err = new HttpException(422, "La película ya se encuentra en la lista.");
-            throw err;
-        }
         
-        const res = await User.updateOne(
+       await User.updateOne(
             { _id: userId, "lists.tag": "to_watch"},
-            { $push: { "lists.$.films": newFilm } },
+            !filmExists ? { $push: { "lists.$.films": newFilm } } : { $pull: { "lists.$.films": { id: newFilm.id } } },
             {
                 new: true, // Return the modified document
                 projection: { lists: { $elemMatch: { "lists.tag": "to_watch" } } } // Project only the matched list

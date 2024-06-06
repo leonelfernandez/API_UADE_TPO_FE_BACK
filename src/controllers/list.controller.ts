@@ -70,12 +70,12 @@ export const getListInfo = async (req: Request, res: Response, next: NextFunctio
 };
 
 
-export const addFilmToWatchList = async (req: Request, res: Response, next: NextFunction) => {
+export const toggleFilmToWatchList = async (req: Request, res: Response, next: NextFunction) => {
   const userId = req?.userId as string;
   const film = req.body.film as Movie;
   try {
       
-      await ListService.addFilmToWatchList(userId, film);
+      await ListService.toggleFilmToWatchList(userId, film);
       
       res.status(201).json({
           message: "Película añadida a la lista",
