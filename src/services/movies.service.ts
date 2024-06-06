@@ -1,5 +1,4 @@
 import HttpException from "../common/http-exception";
-import Film from "../models/film/film.model";
 import { tmdb } from "../lib/tmdb";
 import { Movie, Person, PopularMovies, Search } from "tmdb-ts";
 

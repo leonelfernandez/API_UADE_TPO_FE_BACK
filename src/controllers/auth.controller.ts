@@ -148,7 +148,7 @@ export const grantAccessToResetPassword = async (req: Request, res: Response, ne
     }
 
     res.status(200).json({email: user.email});
-  } catch(err: any) {
+  } catch(err) {
     next(err);
   }
 }
@@ -171,7 +171,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
       })
 
       res.status(200).json({message: "Constraseña cambiada!"})
-    } catch (err: any) {
+    } catch (err) {
       next(err);
     }
 }
@@ -214,7 +214,7 @@ export const login = async (
     res.status(200).json({
       jwt: token
     });
-  } catch (err: any) {
+  } catch (err) {
     next(err);
   }
 };

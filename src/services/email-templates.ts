@@ -24,7 +24,7 @@ export module EmailTemplatesModule {
     <mj-column vertical-align="middle" width="100%">
       <mj-text align="left" color="#ffffff" font-size="22px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span style="color:hsl(236, 100%, 87%)">Estimado ${user.username}</span><br /><br /> Bienvenido a NetList.</mj-text>
       <mj-text align="left" color="#ffffff" font-size="15px" line-height=2 font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">Estamos muy emocionados de que hayas decidido probar nuestro servicio. Si tienes alguna pregunta, no dudes en contactarnos en ${process.env.MAIL_USERNAME}. Para continuar, necesitamos que actives tu cuenta. ¡Esperamos verte pronto!</mj-text>
-      <mj-button align="left" font-size="22px"background-color="hsl(246, 80%, 60%)" border-radius="10px" color="#fff" font-family="open Sans Helvetica, Arial, sans-serif" href=${process.env.NODE_ENV === 'production' ? `${process.env.PRODUCTION_URL}auth/register/${token}` : `${process.env.DEV_URL}register/${token}`}>Activar Cuenta</mj-button>
+      <mj-button align="left" font-size="22px"background-color="hsl(246, 80%, 60%)" border-radius="10px" color="#fff" font-family="open Sans Helvetica, Arial, sans-serif" href=${process.env.NODE_ENV === 'production' ? `${process.env.PRODUCTION_URL}auth/register/${token}` : `${process.env.DEV_URL}auth/register/${token}`}>Activar Cuenta</mj-button>
       <mj-text align="left" color="#ffffff" font-size="15px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px" line-height=2>Gracias, <br /> El equipo de NetList</mj-text>
     </mj-column>
   </mj-section>

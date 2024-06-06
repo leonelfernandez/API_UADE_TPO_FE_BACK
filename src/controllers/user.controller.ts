@@ -10,37 +10,11 @@ export const getUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userId = (req as any).userId;
+  const userId = req.userId as string;
 
   try {
     const user = await AuthService.findById(userId);
-
-    console.log(user);
-
-    res.status(200).json({
-        username: user.username,
-        role: "USER",
-        lists: [
-          {
-            id: 1,
-            title: "Por ver",
-            films: [],
-            canDelete: false,
-          },
-          {
-            id: 2,
-            title: "Preferidas",
-            films: [],
-            canDelete: false,
-          },
-          {
-            id: 3,
-            title: "Vistas",
-            films: [],
-            canDelete: false,
-          },
-        ],
-    });
+    res.status(200).json(user);
   } catch (err: any) {
     next(err);
   }

@@ -1,8 +1,11 @@
-import { Film } from '../film/film.interface';
+import { Document } from "mongodb";
+import { Movie } from "tmdb-ts";
 
-export interface List {
-    id: number;
+export type ListTag = "to_watch" | "watched" | "favorite";
+
+export interface List extends Document {
     title: string;
-    films: Array<Film>;
+    films: Array<Movie>;
     canDelete?: boolean,
+    tag?: ListTag
   }

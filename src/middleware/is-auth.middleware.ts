@@ -7,7 +7,7 @@ dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
-export default (req: any, res: Response, next: NextFunction) => {
+export default (req: Request, res: Response, next: NextFunction) => {
     const token = req.get("Authorization");
     
     if(!token) return;
