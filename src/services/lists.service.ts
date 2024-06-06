@@ -1,107 +1,125 @@
-import mongoose from "mongoose";
-import { BaseUser, ExtendedUser } from "../models/user/user.interface";
 import User from "../models/user/user.model";
 import HttpException from "../common/http-exception";
 import { List } from "../models/list/list.interface";
-import { Film } from "../models/film/film.interface";
+import { Movie } from "tmdb-ts";
 
-export const createNewList = async (id: string, list: List) => { 
-    let user: BaseUser | null = null;
-
+export const createNewList = async (userId: string, list: List) => { 
     try {
-        user = await User.findByIdAndUpdate(
-            id,
+        await User.updateOne(
+            { _id: userId },
             { $push: { lists: list,}, },
             { new: true, }
         ).exec();
-  
-      if (!user) {
-        const err = new HttpException(422, "El usuario no existe.");
-        throw err;
-      }
-
     } catch (err) {
       throw err;
     }
   
 };
 
-export const deleteList = async (id: string, listTitle: string) => { 
-    let user: BaseUser | null = null;
+export const deleteList = async (userId: string, listId: string) => { 
     try {
-        user = await User.findByIdAndUpdate(
-            id,
-            { $pull: { lists: { title: listTitle } } },
+        await User.updateOne(
+            { _id: userId },
+            { $pull: { lists: { _id: listId } } },
             { new: true, }
         ).exec();
-  
-      if (!user) {
-        const err = new HttpException(422, "El usuario no existe.");
-        throw err;
-      }
-
     } catch (err) {
       throw err;
     }
-
 };
 
-export const getListInfo = async (id: string, listTitle: string) => {
-    let user: BaseUser | null = null;
+export const getListInfo = async (userId: string, listId: string) => {
     let list: List | null = null;
 
     try {
-        user = await User.findById(id).exec();
-        if (!user) {
-            const err = new HttpException(422, "El usuario no existe.");
+        const returnedLists = await User.findOne<{ lists: List[] }>({
+            lists: { $elemMatch: { _id: listId } },
+        }, { _id: userId, "lists.$": 1 }).exec();
+
+        
+        if (!returnedLists?.lists.length) {
+            const err = new HttpException(422, "La lista no existe.");
             throw err;
         }
+
+        list = returnedLists?.lists[0];
 
     } catch (err) {
         throw err;
     }
-    
-    return user.lists.find((list) => list.title === listTitle);
+
+    return list;
 
 };
 
 
-export const addFilmToList = async (id: string, listTitle: string, newFilm: Film) => {
-    let user: BaseUser | null = null;
-
+export const addFilmToList = async (userId: string, listId: string, newFilm: Movie) => {
     try {
-        user = await User.findByIdAndUpdate(
-            id,
-            { $push: { 'lists.$.films': newFilm } },
-            { new: true }
-        ).exec();
-    
-        if (!user) {
-            const err = new HttpException(422, "El usuario no existe.");
+        const filmExists = await User.findOne({
+            _id: userId,
+            "lists": {
+              $elemMatch: {
+                _id: listId,
+                films: { $elemMatch: { id: newFilm.id } }
+              }
+            }
+          }).exec();
+
+        if (filmExists) {
+            const err = new HttpException(422, "La película ya se encuentra en la lista.");
             throw err;
         }
-    } catch (err) {
-        throw err;
-    }   
-};
 
-export const deleteFilmFromList = async (id: string, listTitle: string, filmTitle: string) => {
-    let user: BaseUser | null = null;
-
-    try {
-        user = await User.findByIdAndUpdate(
-            { id, 'lists.title': listTitle },
-            { $pull: { 'lists.$.films': filmTitle } },
-            { new: true }
+        await User.updateOne(
+            { _id: userId, "lists._id": listId },
+            { $push: { "lists.$.films": newFilm } },
+            {
+                new: true, // Return the modified document
+                projection: { lists: { $elemMatch: { _id: listId } } } // Project only the matched list
+            }
         ).exec();
-        if (!user) {
-            const err = new HttpException(422, "El usuario no existe.");
-            throw err;
-        }
+
     } catch (err) {
         throw err;
     }
+};
 
+export const toggleFilmToWatchList = async (userId: string, newFilm: Movie) => {
+    try {
+
+        const filmExists = await User.findOne({
+            _id: userId,
+            "lists": {
+              $elemMatch: {
+                tag: "to_watch",
+                films: { $elemMatch: { id: newFilm.id } }
+              }
+            }
+          }).exec();
+        
+       await User.updateOne(
+            { _id: userId, "lists.tag": "to_watch"},
+            !filmExists ? { $push: { "lists.$.films": newFilm } } : { $pull: { "lists.$.films": { id: newFilm.id } } },
+            {
+                new: true, // Return the modified document
+                projection: { lists: { $elemMatch: { "lists.tag": "to_watch" } } } // Project only the matched list
+            }
+        ).exec();
+
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const deleteFilmFromList = async (userId: string, listId: string, filmId: string) => {
+    try {
+        await User.updateOne(
+            { _id: userId, "lists._id": listId },
+            { $pull: { "lists.$.films": { _id: filmId } } }
+        );
+    } catch (err) {
+        throw err;
+    }
 };
 
 

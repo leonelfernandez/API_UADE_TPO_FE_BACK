@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { Film } from "../film/film.interface";
+import { Movie } from "tmdb-ts";
 
-const filmSchema = new Schema<Film>({
+export const filmSchema = new Schema<Movie>({
     adult: {
         type: Boolean,
         required: true
@@ -15,7 +15,7 @@ const filmSchema = new Schema<Film>({
         required: true
     } ,
     id: {
-        type: Number ,
+        type: Number,
         required: true
     },
     original_language: {
@@ -60,6 +60,6 @@ const filmSchema = new Schema<Film>({
     }
 })
 
-const Film = model<Film>("Film", filmSchema);
+const Film = model<Movie>("Film", filmSchema);
 
 export default Film;

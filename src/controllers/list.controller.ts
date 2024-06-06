@@ -1,13 +1,8 @@
-import { NextFunction, Request, Response, Errback } from "express";
-import HttpException from "../common/http-exception";
-import * as AuthService from "../services/auth.service";
-import { hash, verify } from "argon2";
-import User from "../models/user/user.model";
-import { Tokens } from "../models/user/user.interface";
+import { NextFunction, Request, Response } from "express";
 import * as dotenv from "dotenv";
 import List from "../models/list/list.model";
 import * as ListService from "../services/lists.service";
-import Film from "../models/film/film.model";
+import { Movie } from "tmdb-ts";
 
 
 dotenv.config();
@@ -18,57 +13,42 @@ export const addNewListToUser = async (
   res: Response,
   next: NextFunction
 ) => {
-    const id = req.params.id;
+    const userId = req.userId as string;
     const title = req.body.title;
 
   try {
 
     const list = new List({
-        id: id,
         title: title,
         films: [],
         canDelete: true,
     });
 
-    ListService.createNewList(id, list);
-
-    //const listUpdated = await list.save();
+    await ListService.createNewList(userId, list);
 
 
     res.status(201).json({
-      message: "List added to user!",
-      userId: id,
+      message: "Lista creada",
     });
-  } catch (err: any) {
-    if (!(err instanceof HttpException)) {
-      err.statusCode = 422;
-      err.message = "Validation failed";
-    }
-
+    
+  } catch (err) {
     next(err);
   }
 };
 
 
 export const deleteUserList = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const title = req.body.title;
+    const userId = req.userId as string;
+    const listId = req.params.listId;
 
   try {
 
-    ListService.deleteList(id, title);
+    ListService.deleteList(userId, listId);
 
     res.status(201).json({
-      message: "List deleted from user!",
-      userId: id,
-      listName: title,
+      message: "Lista eliminada",
     });
-  } catch (err: any) {
-    if (!(err instanceof HttpException)) {
-      err.statusCode = 422;
-      err.message = "Validation failed";
-    }
-
+  } catch (err) {
     next(err);
   }
 
@@ -76,72 +56,67 @@ export const deleteUserList = async (req: Request, res: Response, next: NextFunc
 
 
 export const getListInfo = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const title = req.body.title;
+    const userId = req.userId as string;
+    const listId = req.params.listId;
+
     try {
-        const list = await ListService.getListInfo(id, title);
+        const list = await ListService.getListInfo(userId, listId);
         
         res.status(200).json(list);
 
-    } catch (err: any) {
-    if (!(err instanceof HttpException)) {
-      err.statusCode = 422;
-      err.message = "Validation failed";
-    }
-
+    } catch (err) {
     next(err);
   }
 };
 
+
+export const toggleFilmToWatchList = async (req: Request, res: Response, next: NextFunction) => {
+  const userId = req?.userId as string;
+  const film = req.body.film as Movie;
+  try {
+      
+      await ListService.toggleFilmToWatchList(userId, film);
+      
+      res.status(201).json({
+          message: "Película añadida a la lista",
+      });
+
+  } catch (err) {
+      next(err);
+  }
+
+};
 export const addFilmToList = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const title = req.body.title;
-    const film = req.body.film;
+    const userId = req?.userId as string;
+    const listId = req.params.listId;
+    const film = req.body.film as Movie;
     try {
         
-        const filmO: Film = new Film({
-            ...film
-        });
-
-        ListService.addFilmToList(id, title, filmO);
+        await ListService.addFilmToList(userId, listId, film);
         
         res.status(201).json({
-            message: "Film added to list!",
-            userId: id,
-            listName: title,
-            film: film,
+            message: "Película añadida a la lista",
         });
 
-    } catch (err: any) {
-        if (!(err instanceof HttpException)) {
-          err.statusCode = 422;
-          err.message = "Validation failed";
-        }
+    } catch (err) {
         next(err);
     }
 
 };
 
 export const deleteFilmFromList = async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const title = req.body.title;
-    const film = req.body.film; //titulo de la pelicula
+    const userId = req.userId as string;
+    const listId = req.params.listId as string;
+    const filmId = req.body.filmId as string;
     try {
 
-        ListService.deleteFilmFromList(id, title, film);
+        await ListService.deleteFilmFromList(userId, listId, filmId);
         
         res.status(201).json({
-            message: "Film deleted from list!",
-            userId: id,
-            listName: title,
-            film: film,
+            message: "Lista eliminada",
         });
 
-    } catch (err: any) {
-        if (!(err instanceof HttpException)) {
-          err.statusCode = 422;
-          err.message = "Validation failed";
-        }
+    } catch (err) {
         next(err);
     }
 
