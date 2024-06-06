@@ -28,16 +28,19 @@ const userSchema = new Schema<BaseUser>({
               title: "Por ver",
               films: [],
               canDelete: false,
+              tag: "to_watch"
             },
             {
               title: "Preferidas",
               films: [],
               canDelete: false,
+              tag: "favorite"
             },
             {
               title: "Vistas",
               films: [],
               canDelete: false,
+              tag: "watched"
             },
           ]
     },

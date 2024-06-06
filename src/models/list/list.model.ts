@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { List } from "../list/list.interface";
+import { List, ListTag } from "../list/list.interface";
 import { filmSchema } from "../film/film.model";
 
 
@@ -11,8 +11,13 @@ export const listSchema = new Schema<List>({
     films: [filmSchema],
     canDelete: {
         type: Boolean,
-        required: true,
+        required: false,
         default: true
+    },
+    tag: {
+        type: String,
+        required: false,
+        enum: ["to_watch", "watched", "favorite"]
     }
 })
 

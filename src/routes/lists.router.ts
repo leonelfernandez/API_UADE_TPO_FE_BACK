@@ -17,6 +17,8 @@ listRoutes.get("/listInfo/:listId", isAuth, ListController.getListInfo);
 
 listRoutes.post("/addFilm/:listId", isAuth, ListController.addFilmToList);
 
+listRoutes.post("/addToWatch", isAuth, ListController.addFilmToWatchList);
+
 listRoutes.post("/deleteFilm/:listId", isAuth, ListController.deleteFilmFromList);
 
 // //Buscar peliculas por titulo, director o actor

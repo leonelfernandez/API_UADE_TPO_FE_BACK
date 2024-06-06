@@ -1,9 +1,4 @@
-import { NextFunction, Request, Response, Errback } from "express";
-import HttpException from "../common/http-exception";
-import * as AuthService from "../services/auth.service";
-import { hash, verify } from "argon2";
-import User from "../models/user/user.model";
-import { Tokens } from "../models/user/user.interface";
+import { NextFunction, Request, Response } from "express";
 import * as dotenv from "dotenv";
 import List from "../models/list/list.model";
 import * as ListService from "../services/lists.service";
@@ -33,15 +28,10 @@ export const addNewListToUser = async (
 
 
     res.status(201).json({
-      message: "List added to user!",
+      message: "Lista creada",
     });
     
-  } catch (err: any) {
-    if (!(err instanceof HttpException)) {
-      err.statusCode = 422;
-      err.message = "Validation failed";
-    }
-
+  } catch (err) {
     next(err);
   }
 };
@@ -56,14 +46,9 @@ export const deleteUserList = async (req: Request, res: Response, next: NextFunc
     ListService.deleteList(userId, listId);
 
     res.status(201).json({
-      message: "List deleted from user!",
+      message: "Lista eliminada",
     });
-  } catch (err: any) {
-    if (!(err instanceof HttpException)) {
-      err.statusCode = 422;
-      err.message = "Validation failed";
-    }
-
+  } catch (err) {
     next(err);
   }
 
@@ -79,34 +64,41 @@ export const getListInfo = async (req: Request, res: Response, next: NextFunctio
         
         res.status(200).json(list);
 
-    } catch (err: any) {
-    if (!(err instanceof HttpException)) {
-      err.statusCode = 422;
-      err.message = "Validation failed";
-    }
-
+    } catch (err) {
     next(err);
   }
 };
 
+
+export const addFilmToWatchList = async (req: Request, res: Response, next: NextFunction) => {
+  const userId = req?.userId as string;
+  const film = req.body.film as Movie;
+  try {
+      
+      await ListService.addFilmToWatchList(userId, film);
+      
+      res.status(201).json({
+          message: "Película añadida a la lista",
+      });
+
+  } catch (err) {
+      next(err);
+  }
+
+};
 export const addFilmToList = async (req: Request, res: Response, next: NextFunction) => {
     const userId = req?.userId as string;
     const listId = req.params.listId;
     const film = req.body.film as Movie;
     try {
         
-        const list = await ListService.addFilmToList(userId, listId, film);
+        await ListService.addFilmToList(userId, listId, film);
         
         res.status(201).json({
-            message: "Film added to list!",
-            list
+            message: "Película añadida a la lista",
         });
 
-    } catch (err: any) {
-        if (!(err instanceof HttpException)) {
-          err.statusCode = 422;
-          err.message = "Validation failed";
-        }
+    } catch (err) {
         next(err);
     }
 
@@ -118,18 +110,13 @@ export const deleteFilmFromList = async (req: Request, res: Response, next: Next
     const filmId = req.body.filmId as string;
     try {
 
-        const list = ListService.deleteFilmFromList(userId, listId, filmId);
+        await ListService.deleteFilmFromList(userId, listId, filmId);
         
         res.status(201).json({
-            message: "Film deleted from list!",
-            list,
+            message: "Lista eliminada",
         });
 
-    } catch (err: any) {
-        if (!(err instanceof HttpException)) {
-          err.statusCode = 422;
-          err.message = "Validation failed";
-        }
+    } catch (err) {
         next(err);
     }
 
