@@ -13,18 +13,11 @@ listRoutes.post("/delete/:listId", isAuth, ListController.deleteUserList);
 //Obtener informacion de una lista especifica de un usuario especifico
 listRoutes.get("/listInfo/:listId", isAuth, ListController.getListInfo);
 
-
-
+// Agregar una película a una lista específica
 listRoutes.post("/addFilm/:listId", isAuth, ListController.addFilmToList);
 
+// Cambiar el estado de una película en la lista de "para ver"
 listRoutes.post("/toggleToWatch", isAuth, ListController.toggleFilmToWatchList);
 
+// Eliminar una película de una lista específica
 listRoutes.post("/deleteFilm/:listId", isAuth, ListController.deleteFilmFromList);
-
-// //Buscar peliculas por titulo, director o actor
-// movieRoutes.put(
-//   "/search",
-//   [body("param").exists().isString().notEmpty().withMessage("Por favor, enviar parámetro de búsqueda")],
-//   validateFields,
-//   MoviesController.searchMovies
-// )
