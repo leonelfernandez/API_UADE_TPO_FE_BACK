@@ -1,7 +1,6 @@
 import * as dotenv from "dotenv";
 import { NextFunction, Request, Response, Errback } from "express";
-import * as AuthService from "../services/auth.service";
-import HttpException from "../common/http-exception";
+import * as UserService from "../services/user.service";
 
 dotenv.config();
 
@@ -13,9 +12,9 @@ export const getUser = async (
   const userId = req.userId as string;
 
   try {
-    const user = await AuthService.findById(userId);
+    const user = await UserService.findById(userId);
     res.status(200).json(user);
-  } catch (err: any) {
+  } catch (err) {
     next(err);
   }
 };

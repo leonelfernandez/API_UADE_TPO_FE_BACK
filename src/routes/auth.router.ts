@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Errback, Router } from "express";
 import * as AuthController from "../controllers/auth.controller";
 import { body } from "express-validator";
-import * as AuthService from "../services/auth.service";
+import * as UserService from "../services/user.service";
 import validateFields from "../middleware/validation-error.middleware";
 import User from "../models/user/user.model";
 
@@ -14,7 +14,7 @@ authRoutes.post(
       .isEmail()
       .withMessage("Por favor, ingresa un correo electrónico válido.")
       .custom(async (value, { req }) => {
-        const user = await AuthService.findByEmail(req.body.email);
+        const user = await UserService.findByEmail(req.body.email);
         if (!user?.active) {
           return Promise.reject("Usuario no encontrado");
         }
