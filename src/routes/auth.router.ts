@@ -16,7 +16,7 @@ authRoutes.post(
       .custom(async (value, { req }) => {
         const user = await UserService.findByEmail(req.body.email);
         if (!user?.active) {
-          return Promise.reject("Usuario no encontrado");
+          return Promise.reject("Usuario no encontrado o cuenta no confirmada.");
         }
       })
       .normalizeEmail(),
@@ -34,7 +34,7 @@ authRoutes.post(
       .custom(async (value, { req }) => {
         const user = await User.findOne({ email: req.body.email });
         if (user) {
-          return Promise.reject("¡El correo electrónico ya existe!");
+          return Promise.reject("El correo ingresado ya se encuentra en uso.");
         }
       })
       .normalizeEmail(),
@@ -52,7 +52,6 @@ authRoutes.post(
     }),
   ],
   validateFields,
-
   AuthController.register
 );
 

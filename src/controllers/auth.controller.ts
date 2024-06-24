@@ -14,7 +14,7 @@ export const register = async (
     await AuthService.register(username, email, password);
 
     res.status(201).json({
-      message: "User created!",
+      message: "Usuario creado!",
     });
   } catch (err) {
     next(err);
@@ -32,7 +32,7 @@ export const confirmAccount = async (
     await AuthService.activateAccount(token);
 
     res.status(201).json({
-      message: "User updated!",
+      message: "Usuario actualizado!",
       active: true,
     });
   } catch (err) {

@@ -6,10 +6,10 @@ export const findById = async (id: string) => {
     let user: ExtendedUser | null = null;
   
     try {
-      user = await User.findOne({ _id: id }).lean();
+      user = await User.findOne({ _id: id, active: true }).lean();
   
       if (!user) {
-        const err = new HttpException(422, "El usuario no existe.");
+        const err = new HttpException(422, "El usuario no existe o la cuenta no ha sido confirmada.");
         throw err;
       }
     } catch (err) {
@@ -23,10 +23,10 @@ export const findById = async (id: string) => {
     let user: ExtendedUser | null = null;
     console.log(email);
     try {
-      user = await User.findOne({ email: email });
+      user = await User.findOne({ email: email, active: true });
   
       if (!user) {
-        const err = new HttpException(422, "El usuario no existe.");
+        const err = new HttpException(422, "El usuario no existe o la cuenta no ha sido confirmada.");
         throw err;
       }
     } catch (err) {

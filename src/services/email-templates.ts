@@ -17,7 +17,7 @@ export module EmailTemplatesModule {
   </mj-section>
   <mj-section background-color="hsl(246, 80%, 60%)" padding-bottom="0px" padding-top="0">
     <mj-column vertical-align="top" width="100%">
-      <mj-text align="left" color="#ffffff" font-size="45px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px" padding-bottom="30px" padding-top="50px">Welcome aboard</mj-text>
+      <mj-text align="left" color="#ffffff" font-size="45px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px" padding-bottom="30px" padding-top="50px">Bienvenido a bordo</mj-text>
     </mj-column>
   </mj-section>
   <mj-section background-color="hsl(235, 46%, 20%)" padding-bottom="20px" padding-top="20px">
