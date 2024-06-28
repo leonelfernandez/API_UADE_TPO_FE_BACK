@@ -78,7 +78,7 @@ export const toggleFilmToWatchList = async (req: Request, res: Response, next: N
       await ListService.toggleFilmToWatchList(userId, film);
       
       res.status(201).json({
-          message: "Película añadida a la lista",
+          message: "Lista modificada",
       });
 
   } catch (err) {
